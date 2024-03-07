@@ -1,0 +1,4 @@
+@keyframes my-input {
+    50%{border-radius: 0px;}  
+    50%{border-radius: 10px;}  
+}
