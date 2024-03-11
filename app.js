@@ -23,9 +23,12 @@ myInput.addEventListener("keyup", function (e) {
   var taskValue = myInput.value.trim();
   if (e.key === "Enter" && taskValue) {
     inspector();
-
     if (isEdit === false) {
-      var task = { taskTitle: taskValue, status: "pending", editTask: "false" };
+      var task = {
+        taskTitle: taskValue,
+        status: "pending",
+        editTask: "false",
+      };
       todos.push(task);
       myInput.value = "";
       printTask("all");
@@ -145,23 +148,35 @@ function edit(index) {
 }
 function inspector() {
   var errorBox = document.createElement("div");
-  errorBox.classList.add("error-box")
+  errorBox.classList.add("error-box");
   todos.forEach((item, index) => {
     if (item.taskTitle === myInput.value.trim()) {
       errorBox.innerHTML = `
       <p class='text-error'>There is a similar note in your list. Do you want to add this note?</p>
       <button class='btn-skip' onclick='skip()'>Skip</button>
-      <button class='btn-add' onclick='add()'>Add</button>
-      `
-    };
+      <button class='btn-add'>Add</button>
+      `;
+      todos.splice(index, 1);
+    }
   });
+  const inputValue = myInput.value.trim();
   if (errorBox.childElementCount > 1) {
     document.getElementsByTagName("body").item(0).appendChild(errorBox);
+    setTimeout(() => {
+      document.getElementsByClassName('error-box').item(0).remove()
+    }, 10000);
+    document.getElementsByClassName("btn-add").item(0).addEventListener("click", () => add(inputValue) , {once:true});
   };
-};
-function skip() {
-  inspector(sk)
 }
-function add() {
-  inspector(ad)
+function skip() {
+  document.getElementsByClassName("error-box").item(0).remove();
+}
+function add(inputValue) {
+  var newTask = {
+    taskTitle: inputValue,
+    status: "pending",
+    editTask: "false",
+  };
+  todos.push(newTask);
+  printTask("all");
 }
